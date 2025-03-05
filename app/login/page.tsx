@@ -31,7 +31,6 @@ const Login: React.FC = () => {
     try {
       // Call the API service and let it handle JSON serialization and error handling
       const response = await apiService.post<User>("/users", values);
-
       // Use the useLocalStorage hook that returned a setter function (setToken in line 41) to store the token if available
       if (response.token) {
         setToken(response.token);
@@ -45,8 +44,22 @@ const Login: React.FC = () => {
       } else {
         console.error("An unknown error occurred during login.");
       }
+      router.push("/register")
     }
   };
+
+  const handleRegister = async () => {
+    try {
+      router.push("/register");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(`Something went wrong during the login:\n${error.message}`);
+      } else {
+        console.error("An unknown error occurred during login.");
+      }
+    }
+  };
+
 
   return (
     <div className="login-container">
@@ -66,18 +79,27 @@ const Login: React.FC = () => {
           <Input placeholder="Enter username" />
         </Form.Item>
         <Form.Item
-          name="name"
-          label="Name"
-          rules={[{ required: true, message: "Please input your name!" }]}
+          name="password"
+          label="Password"
+          rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input placeholder="Enter name" />
+          <Input placeholder="Enter Password" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-button">
+          <Button type="primary" htmlType="submit" className="login-button"
+          // onClick={() => handleLogin()}>
+          >
             Login
           </Button>
         </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="login-button"
+          onClick={() => handleRegister()}>
+            Register
+          </Button>
+        </Form.Item>
       </Form>
+
     </div>
   );
 };
